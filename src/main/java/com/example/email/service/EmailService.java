@@ -28,6 +28,19 @@ public class EmailService {
         this.emailSender = emailSender;
     }
 
+    public void prepareAndSendEmail() throws MessagingException {
+
+        String htmlTemplate = "templates/emailTemplate";
+        String mailTo  = "supunibandara07@gmail.com";
+        initializeTemplateEngine();
+
+        context.setVariable("sender", "Thymeleaf Email");
+        context.setVariable("mailTo", mailTo);
+
+        String htmlBpdy =  templateEngine.process(htmlTemplate, context);
+sendEmail(mailTo, "Thymeleaf email demo", htmlBpdy);
+    }
+
     private void sendEmail(String mailTo, String subject, String mailBody) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
 
@@ -35,6 +48,8 @@ public class EmailService {
         helper.setTo(mailTo);
         helper.setSubject(subject);
         helper.setText(mailBody, true);
+        emailSender.send(message);
+        LOG.info("Email sent to"+mailTo);
     }
 
     private static void initializeTemplateEngine() {
