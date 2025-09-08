@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+
 import java.util.Locale;
 
 @Service
@@ -21,7 +22,7 @@ public class EmailService {
 
     private JavaMailSender emailSender;
 
-    private Logger  LOG = LoggerFactory.getLogger(EmailService.class);
+    private Logger LOG = LoggerFactory.getLogger(EmailService.class);
 
     @Autowired
     public void setEmailSender(JavaMailSender emailSender) {
@@ -31,31 +32,31 @@ public class EmailService {
     public void prepareAndSendEmail() throws MessagingException {
 
         String htmlTemplate = "templates/emailTemplate";
-        String mailTo  = "supunibandara07@gmail.com";
+        String mailTo = "sitharabandara1997@gmail.com";
         initializeTemplateEngine();
 
         context.setVariable("sender", "Thymeleaf Email");
         context.setVariable("mailTo", mailTo);
 
-        String htmlBpdy =  templateEngine.process(htmlTemplate, context);
-sendEmail(mailTo, "Thymeleaf email demo", htmlBpdy);
+        String htmlBpdy = templateEngine.process(htmlTemplate, context);
+        sendEmail(mailTo, "Thymeleaf email demo", htmlBpdy);
     }
 
     private void sendEmail(String mailTo, String subject, String mailBody) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
 
-        MimeMessageHelper  helper  = new MimeMessageHelper(message, true);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(mailTo);
         helper.setSubject(subject);
         helper.setText(mailBody, true);
         emailSender.send(message);
-        LOG.info("Email sent to"+mailTo);
+        LOG.info("Email sent to" + mailTo);
     }
 
     private static void initializeTemplateEngine() {
 
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
-        resolver.setTemplateMode("HTML5");
+        resolver.setTemplateMode("HTML");
         resolver.setSuffix(".html");
         resolver.setCharacterEncoding("UTF-8");
         templateEngine = new TemplateEngine();
